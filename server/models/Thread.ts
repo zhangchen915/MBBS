@@ -1,6 +1,6 @@
 import { DataTypes, Model, Op, Sequelize, SaveOptions, WhereOptions } from 'sequelize';
 import { createModelCache } from '../utils/model-cache';
-import moment = require('moment');
+import * as dayjs from 'dayjs';
 import { getUser, User } from './User';
 import { getPost, getPostModel, Post } from './Post';
 import { hasUserLikedPost } from './LikePostUser';
@@ -193,7 +193,7 @@ export async function getUserTodayCreateCount(db: Sequelize, userId: number, cat
       is_draft: false,
       ...(categoryId == null ? {} : { category_id: categoryId }),
       created_at: {
-        [Op.gte]: moment().startOf('day').toDate(),
+        [Op.gte]: dayjs().startOf('day').toDate(),
       },
     },
   });

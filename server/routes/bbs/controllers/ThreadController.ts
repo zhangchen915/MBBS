@@ -31,8 +31,7 @@ import { mailToUser } from '../../../utils/mail-util';
 import CurrentDomain from '../decorators/CurrentDomain';
 import { getDefaultHost } from '../../../utils/bind-host-util';
 import { getDBNameFromDB } from '../../../models/db';
-import moment = require('moment');
-import dayjs = require('dayjs');
+import * as dayjs from 'dayjs';
 import { isDevEnv } from '../../../utils/env-util';
 
 const viewThreadIdCache = new LRUCache<string, true>({
@@ -484,8 +483,8 @@ export default class ThreadController {
       ...(createdAtBegin || createdAtEnd
         ? {
             created_at: {
-              ...(createdAtBegin ? { [Op.gte]: moment(createdAtBegin).toDate() } : {}),
-              ...(createdAtEnd ? { [Op.lte]: moment(createdAtEnd).toDate() } : {}),
+              ...(createdAtBegin ? { [Op.gte]: dayjs(createdAtBegin).toDate() } : {}),
+              ...(createdAtEnd ? { [Op.lte]: dayjs(createdAtEnd).toDate() } : {}),
             },
           }
         : {}),
