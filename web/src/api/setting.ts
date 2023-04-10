@@ -35,10 +35,12 @@ export interface Setting {
   site_need_login_first: '0' | '1';
   /** 论坛是否开启了三方登录 */
   site_enable_third_platform_login: '0' | '1';
-  /** 使用 xxx.mbbs.cc 域名访问论坛时，默认重定向至 已设置的自定义域名 */
-  site_redirect_to_custom_host: '0' | '1';
+  /** 三方授权登录免审核 */
+  site_third_platform_login_pass_validate: '0' | '1';
   /** 开启邮件功能 */
   site_enable_email: '0' | '1';
+  /** 进入首页默认显示目标板块内容 */
+  site_home_page_show_category: `${number}`;
   /** 每人每日在所有分类发帖 总量上限 */
   person_daily_create_thread: `${number}`;
   /** 每人每日在一个分类内 发帖总量上限 */

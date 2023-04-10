@@ -38,14 +38,24 @@ export default class RegisterController {
     // 校验通过，开始创建用户
   }
 
-  static async doCreateUser(options: { db: Sequelize; username: string; nickname?: string; password: string; requestIp?: string }) {
+  static async doCreateUser(options: {
+    db: Sequelize;
+    username: string;
+    nickname?: string;
+    password: string;
+    requestIp?: string;
+    needValidate?: boolean;
+  }) {
     const { db, username, nickname = username, password, requestIp } = options;
 
     const defaultGroup = await getDefaultGroup(db);
     if (!defaultGroup) {
       throw new UIError('论坛配置异常：缺少默认角色分组');
     }
-    const needValidate = (await getSettingValue(db, 'register_validate')) === '1';
+    let needValidate = options.needValidate;
+    if (needValidate == null) {
+      needValidate = (await getSettingValue(db, 'register_validate')) === '1';
+    }
 
     const UserModel = await getUserModel(db);
     const user = await UserModel.create({
@@ -88,7 +98,7 @@ export default class RegisterController {
 
   @Get('/captcha')
   getCaptcha() {
-    const captcha = svgCaptcha.create();
+    const captcha = svgCaptcha.create({ ignoreChars: 'IloO0' });
     const captchaId = captchaIdNext++;
     captchaLruCache.set(captchaId, captcha.text);
     return { id: captchaId, svg: captcha.data };

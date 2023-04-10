@@ -6,7 +6,6 @@ import { noop } from 'lodash';
 import { isDevEnv } from '../utils/env-util';
 import { getDB, getDBNameFromHost } from '../models/db';
 import { getAllSettings, setSettingValue } from '../models/Settings';
-import { getBindHosts } from '../utils/bind-host-util';
 
 const express = require('express');
 const router = express.Router();
@@ -28,15 +27,6 @@ router.get('/', async (req, res, next) => {
       return;
     }
     const setting = await getAllSettings(db);
-
-    if (setting.site_redirect_to_custom_host === '1') {
-      const hosts = await getBindHosts(dbName);
-      const redirectToHost = (hosts?.[0] || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
-      if (redirectToHost && !req.hostname.includes(redirectToHost)) {
-        res.redirect(`http://${redirectToHost}`);
-        return;
-      }
-    }
 
     let pageHtml: string;
     try {
