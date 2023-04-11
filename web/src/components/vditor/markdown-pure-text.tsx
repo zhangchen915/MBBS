@@ -1,16 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { markdownToPureText } from '@/utils/html-to-pure-text';
+import React from 'react';
 
 const MarkdownPureText: React.FC<{
   md: string;
 }> = ({ md }) => {
-  const [text, setText] = useState('');
-
-  useEffect(() => {
-    markdownToPureText(md).then(setText);
-  }, [md]);
-
-  return <>{text}</>;
+  return <div dangerouslySetInnerHTML={{ __html: md }} />;
 };
 
 export default MarkdownPureText;

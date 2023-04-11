@@ -2,7 +2,6 @@ import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { AppBar, Dialog, IconButton, Slide, Toolbar, Typography } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useScreenWidthUpMD } from '@/utils/use-screen-width';
-import Vditor from 'vditor';
 import { TransitionProps } from '@mui/material/transitions';
 import MarkdownEditorSubmit from '@/components/vditor/markdown-editor-submit';
 
@@ -35,7 +34,6 @@ const OpenPopupMarkdownEditor: React.FC<OpenPopupMarkdownEditorProps> = (props) 
     title,
     defaultValue,
     submitButtonText = '提交',
-    placeholder,
     onSubmit,
     defaultOpen = false,
     open: openProp,
@@ -48,7 +46,6 @@ const OpenPopupMarkdownEditor: React.FC<OpenPopupMarkdownEditorProps> = (props) 
   const isWidthUpMD = useScreenWidthUpMD();
   const [open, setOpen] = useState(typeof openProp === 'boolean' ? openProp : defaultOpen);
   const inputValueRef = useRef(defaultValue);
-  const vditorRef = useRef<Vditor>();
 
   useEffect(() => {
     if (typeof openProp === 'boolean') setOpen(openProp);
@@ -65,10 +62,6 @@ const OpenPopupMarkdownEditor: React.FC<OpenPopupMarkdownEditorProps> = (props) 
   };
 
   const doCloseDialog = () => {
-    const currentInput = vditorRef.current?.getValue();
-    if (currentInput) {
-      inputValueRef.current = currentInput;
-    }
     changeOpen(false);
   };
 
@@ -103,8 +96,6 @@ const OpenPopupMarkdownEditor: React.FC<OpenPopupMarkdownEditorProps> = (props) 
           </Toolbar>
         </AppBar>
         <MarkdownEditorSubmit
-          vditor={{ placeholder }}
-          afterInit={(v) => (vditorRef.current = v)}
           defaultMarkdown={inputValueRef.current}
           style={{ flex: 1, height: 0, minHeight: '50vh' }}
           failAlert={onSubmitFailAlert}
@@ -115,7 +106,6 @@ const OpenPopupMarkdownEditor: React.FC<OpenPopupMarkdownEditorProps> = (props) 
             }
             if (clearAfterSubmit) {
               inputValueRef.current = '';
-              if (vditorRef.current) vditorRef.current.setValue('');
             }
             doCloseDialog();
           }}

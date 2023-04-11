@@ -87,10 +87,6 @@ export default function AddThreadPage() {
         categoryId={parseInt(category_id)}
         defaultMarkdown={draft?.content || category.create_thread_template}
         sx={{ marginTop: 1, height: '70vh' }}
-        vditor={{
-          // count: 10000,
-          placeholder: '请输入帖子内容',
-        }}
         failAlert
         submitText="发布"
         onSubmit={async (inputValue) => {

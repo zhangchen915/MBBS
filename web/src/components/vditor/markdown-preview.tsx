@@ -1,12 +1,7 @@
 import React, { useLayoutEffect, useMemo, useRef } from 'react';
-import Vditor from 'vditor';
-import transformWillRenderHtml from '@/components/vditor/transform-will-render-html';
 import hashString from '@/utils/hash-string';
-import 'vditor/dist/index.css';
-import './vditor-reset.less';
 import { useTheme } from '@mui/material';
 import ApiUI from '@/api-ui';
-import { vditorCDNEmojiPathPrefix, vditorCDNThemePathPrefix, vditorCDNUrlPrefix } from '@/components/vditor/util';
 
 const markdownLastRenderHeight: Record<number, number | undefined> = {}; // <markdown-hash, height>
 
@@ -20,7 +15,6 @@ export declare type MarkdownPreviewProps = {
 
 const MarkdownPreview: React.FC<MarkdownPreviewProps> = (props) => {
   const { markdown, transformHtml, style, afterRender, ...otherProps } = props;
-  const theme = useTheme();
   const ref = useRef<HTMLDivElement>(null);
   const markdownHash = useMemo(() => hashString(markdown), [markdown]);
 
@@ -49,24 +43,6 @@ const MarkdownPreview: React.FC<MarkdownPreviewProps> = (props) => {
         });
       });
     }
-
-    Vditor.preview(ref.current, markdown, {
-      cdn: vditorCDNUrlPrefix,
-      mode: theme.palette.mode === 'dark' ? 'dark' : 'light',
-      emojiPath: vditorCDNEmojiPathPrefix,
-      theme: {
-        current: theme.palette.mode === 'dark' ? 'dark' : 'light',
-        path: vditorCDNThemePathPrefix,
-      },
-      lazyLoadImage: markdownLastRenderHeight[markdownHash] ? undefined : require('./img-loading-image.png'),
-      transform: (html) => {
-        html = transformWillRenderHtml(html, true);
-        return transformHtml?.(html) || html;
-      },
-      after() {
-        afterRender?.(ref.current as HTMLElement);
-      },
-    });
 
     // fix 同页面 preview 多个时，懒加载图片不显示 bug
     const loopCheckImageShowId = setInterval(() => {
@@ -116,9 +92,8 @@ const MarkdownPreview: React.FC<MarkdownPreviewProps> = (props) => {
           }
         }
       }}
-    >
-      <span style={{ opacity: 0.5, fontSize: 12 }}>加载中...</span>
-    </div>
+      dangerouslySetInnerHTML={{ __html: markdown }}
+    />
   );
 };
 

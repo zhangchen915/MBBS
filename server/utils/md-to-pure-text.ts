@@ -1,10 +1,5 @@
 import { JSDOM } from 'jsdom';
 
-require('vditor/dist/js/lute/lute.min');
-
-const Lute = (global as any).Lute;
-const lute = Lute.New();
-
 export default function htmlToPureText(html: string): string {
   const { document } = new JSDOM(html).window;
   document.body.innerHTML = html;
@@ -21,12 +16,7 @@ export default function htmlToPureText(html: string): string {
 
 export function markdownToHtml(markdown: string): string {
   if (!markdown) return '';
-  try {
-    return lute.MarkdownStr('', markdown);
-  } catch (e) {
-    console.error(e);
-    return markdown;
-  }
+  return markdown;
 }
 
 export function markdownToPureText(markdown: string): string {

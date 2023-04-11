@@ -40,15 +40,11 @@ export default defineConfig({
     },
   ],
   targets: {
-    chrome: 49,
-    ios: 10,
-    android: 5,
+    chrome: 59,
+    ios: 11,
+    android: 6,
   },
-  extraBabelIncludes: [
-    join(__dirname, 'node_modules/@material-ui'),
-    join(__dirname, 'node_modules/@mui'),
-    join(__dirname, 'node_modules/vditor'),
-  ],
+  extraBabelIncludes: [join(__dirname, 'node_modules/@material-ui'), join(__dirname, 'node_modules/@mui')],
   crossorigin: {
     include: [/mbbs-web/],
   },
